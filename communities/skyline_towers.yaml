@@ -1,0 +1,123 @@
+# Skyline Towers: a smaller community with relaxed rules.
+# Clean owner requests are approved automatically by the agent.
+
+id: skyline-towers
+name: Skyline Towers
+city: Pune
+admin_desk: Skyline Towers Management Office
+
+time_slots:
+  - id: first_half
+    label: "First half (9 AM - 1 PM)"
+    start: "09:00"
+    end: "13:00"
+    capacity: 3
+    aliases: [morning, first half, forenoon]
+  - id: second_half
+    label: "Second half (2 PM - 6 PM)"
+    start: "14:00"
+    end: "18:00"
+    capacity: 3
+    aliases: [afternoon, evening, second half]
+
+intake_fields:
+  - key: resident_name
+    label: Resident name
+    question: What is your full name?
+    from_profile: true
+  - key: phone
+    label: Phone
+    question: What phone number should we use on move day?
+    kind: phone
+    from_profile: true
+  - key: unit
+    label: Unit
+    question: Which flat is this for? (for example T1-0901)
+    kind: unit
+  - key: occupancy
+    label: Owner or tenant
+    question: Are you the owner or a tenant?
+    kind: occupancy
+  - key: move_date
+    label: Move date
+    question: What date are you planning to move?
+    kind: date
+  - key: time_slot
+    label: Time slot
+    question: Would you prefer the first half (9-1) or the second half (2-6)?
+    kind: slot
+  - key: parking_needed
+    label: Parking slot needed
+    question: Do you need a parking slot allotted?
+    kind: yes_no
+    applies_to: [move_in]
+  - key: pets
+    label: Pets
+    question: Will you have any pets in the flat? (yes / no)
+    kind: yes_no
+    applies_to: [move_in]
+    required: false
+  - key: deposit_refund_upi
+    label: Refund UPI ID
+    question: Which UPI ID should the society deposit be refunded to?
+    applies_to: [move_out]
+
+documents:
+  - doc_type: id_proof
+    label: Government ID
+    description: Any government photo ID.
+    applies_to: [move_in]
+  - doc_type: rental_agreement
+    label: Rental agreement
+    description: Copy of the rental agreement.
+    applies_to: [move_in]
+    occupancy: [tenant]
+
+rules:
+  - name: booking_window
+    params: { min_notice_days: 1, max_advance_days: 90 }
+  - name: blocked_days
+    params:
+      dates:
+        - { date: "2026-11-08", reason: "Diwali" }
+  - name: slot_capacity
+  - name: unit_exists
+  - name: no_duplicate_request
+  - name: occupancy_consistency
+    severity: warning
+  - name: required_documents
+    severity: warning
+  - name: dues_clearance
+    severity: warning
+
+autonomy:
+  auto_approve: true
+  request_types: [move_in, move_out]
+  occupancy: [owner]
+
+guidelines:
+  move_in:
+    - Inform security at the main gate when the truck arrives.
+    - Use only the service lift in your tower.
+  move_out:
+    - Settle dues with the management office before moving out.
+    - Hand over keys and access tags at the office.
+
+move_day_checklist:
+  move_in:
+    - Show the approval message at the main gate
+    - Collect access tags from the office
+  move_out:
+    - Hand over keys and access tags
+    - Collect the goods gate pass
+
+faqs:
+  - question: Are weekend moves allowed?
+    answer: Yes, moves are allowed on all days except Diwali.
+    keywords: [sunday, saturday, weekend, holiday]
+  - question: Are pets allowed?
+    answer: Yes. Pets must be registered with the management office within a week of moving in.
+    keywords: [pet, dog, cat]
+  - question: How long does approval take?
+    answer: Owner requests that meet all rules are approved instantly. Others are reviewed the same day.
+    keywords: [how long, approval, approve, time, when]

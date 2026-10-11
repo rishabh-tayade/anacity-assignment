@@ -1,0 +1,17 @@
+# Stand-in for the ANACITY unit registry and billing system.
+# A unit with no occupant is vacant.
+
+green-meadows:
+  - { unit: A-101, occupant: Rahul Mehta, occupancy: owner }
+  - { unit: A-702, occupant: Sanjay Gupta, occupancy: tenant }
+  - { unit: B-1204 }
+  - { unit: B-803 }
+  - { unit: C-305, occupant: Priya Nair, occupancy: tenant, outstanding_dues: 4500 }
+  - { unit: C-1102, occupant: Farhan Qureshi, occupancy: owner }
+  - { unit: D-404, occupant: Meera Iyer, occupancy: tenant }
+
+skyline-towers:
+  - { unit: T1-0901 }
+  - { unit: T1-1203, occupant: Kavita Joshi, occupancy: owner }
+  - { unit: T2-0502, occupant: Arjun Desai, occupancy: tenant, outstanding_dues: 1200 }
+  - { unit: T2-1101 }

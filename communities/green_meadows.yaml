@@ -1,0 +1,160 @@
+# Green Meadows: a large gated community with strict move rules.
+# Every request is reviewed by the facility desk (no auto-approval).
+
+id: green-meadows
+name: Green Meadows
+city: Bengaluru
+admin_desk: Green Meadows Facility Desk
+
+time_slots:
+  - id: morning
+    label: "Morning (8 AM - 12 PM)"
+    start: "08:00"
+    end: "12:00"
+    capacity: 2
+    aliases: [morning, early]
+  - id: afternoon
+    label: "Afternoon (12 PM - 4 PM)"
+    start: "12:00"
+    end: "16:00"
+    capacity: 2
+    aliases: [afternoon, noon, lunch]
+  - id: evening
+    label: "Evening (4 PM - 7 PM)"
+    start: "16:00"
+    end: "19:00"
+    capacity: 1
+    aliases: [evening]
+
+intake_fields:
+  - key: resident_name
+    label: Resident name
+    question: What is your full name?
+    from_profile: true
+  - key: phone
+    label: Phone
+    question: What is the best phone number to reach you on move day?
+    kind: phone
+    from_profile: true
+  - key: unit
+    label: Unit
+    question: Which unit is this for? (for example B-1204)
+    kind: unit
+  - key: occupancy
+    label: Owner or tenant
+    question: Are you the owner of the unit or a tenant?
+    kind: occupancy
+  - key: move_date
+    label: Move date
+    question: Which date would you like to move?
+    kind: date
+  - key: time_slot
+    label: Time slot
+    question: "Which slot works for you: morning (8-12), afternoon (12-4) or evening (4-7)?"
+    kind: slot
+  - key: household_size
+    label: People moving in
+    question: How many people will be living in the unit?
+    kind: number
+    applies_to: [move_in]
+  - key: vehicle_numbers
+    label: Vehicle numbers
+    question: Please share the registration numbers of vehicles that need parking stickers (or say "none").
+    applies_to: [move_in]
+    required: false
+  - key: movers_company
+    label: Packers and movers
+    question: Which packers and movers company are you using? (say "none" if self-moving)
+    required: false
+  - key: forwarding_address
+    label: Forwarding address
+    question: What is your forwarding address? We need it for the deposit refund and any final bills.
+    applies_to: [move_out]
+  - key: access_cards
+    label: Access cards to return
+    question: How many access cards will you be returning?
+    kind: number
+    applies_to: [move_out]
+
+documents:
+  - doc_type: id_proof
+    label: Government ID
+    description: Aadhaar, passport or driving licence of the primary resident.
+    applies_to: [move_in]
+  - doc_type: rental_agreement
+    label: Rental agreement
+    description: Registered rental agreement covering the move-in date.
+    applies_to: [move_in]
+    occupancy: [tenant]
+  - doc_type: police_verification
+    label: Police verification
+    description: Tenant police verification acknowledgement.
+    applies_to: [move_in]
+    occupancy: [tenant]
+  - doc_type: sale_deed
+    label: Sale deed / allotment letter
+    description: Proof of ownership.
+    applies_to: [move_in]
+    occupancy: [owner]
+  - doc_type: owner_noc
+    label: Owner NOC
+    description: No-objection letter from the unit owner for the move-out.
+    applies_to: [move_out]
+    occupancy: [tenant]
+
+rules:
+  - name: booking_window
+    params: { min_notice_days: 3, max_advance_days: 60 }
+  - name: blocked_days
+    params:
+      weekdays: [Sunday]
+      dates:
+        - { date: "2026-10-20", reason: "Dussehra" }
+        - { date: "2026-11-08", reason: "Diwali" }
+  - name: slot_capacity
+  - name: unit_exists
+  - name: no_duplicate_request
+  - name: occupancy_consistency
+    severity: warning
+  - name: required_documents
+    severity: blocker
+  - name: dues_clearance
+    severity: warning
+
+autonomy:
+  auto_approve: false
+
+guidelines:
+  move_in:
+    - Lift padding is mandatory; the desk books the service lift for your slot.
+    - A refundable lift deposit of Rs. 2,000 is collected on move day.
+    - Movers must enter through Gate 2 and carry the gate pass.
+  move_out:
+    - Clear all maintenance dues before the move-out date.
+    - Return all access cards and parking stickers at the facility desk.
+    - The unit is inspected after the move; deposit refunds take up to 15 days.
+
+move_day_checklist:
+  move_in:
+    - Collect the gate pass and lift key from the facility desk
+    - Pay the refundable lift deposit
+    - Collect access cards and parking stickers
+    - Register household members with security
+  move_out:
+    - Hand over access cards and parking stickers
+    - Unit inspection with the facility supervisor
+    - Collect the gate pass for goods leaving the premises
+
+faqs:
+  - question: Can I move on a Sunday?
+    answer: No. Green Meadows does not allow moves on Sundays or on community festival days.
+    keywords: [sunday, weekend, holiday]
+  - question: Is there a lift charge?
+    answer: The service lift is free, but a refundable deposit of Rs. 2,000 is collected on move day.
+    keywords: [lift, elevator, charge, fee, deposit]
+  - question: Can movers park inside?
+    answer: One truck can park at the Gate 2 loading bay during your slot. Other vehicles must park outside.
+    keywords: [truck, park, parking, tempo, vehicle]
+  - question: How long does approval take?
+    answer: The facility desk usually reviews requests within one working day.
+    keywords: [how long, approval, approve, time, when]
